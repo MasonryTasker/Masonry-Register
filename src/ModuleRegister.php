@@ -87,11 +87,7 @@ class ModuleRegister implements ModuleRegisterInterface
 
         // Import the data to the object
         $data = (array)Yaml::parse(file_get_contents($register->fileLocation));
-        foreach ($data as $key => $value) {
-            if (property_exists($register, $key)) {
-                $register->$key = $value;
-            }
-        }
+        $register->fromArray($data);
 
         return $register;
     }
@@ -101,7 +97,24 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     protected function toArray()
     {
-        return get_object_vars($this);
+        return [
+            'workerModules' => $this->workerModules
+        ];
+    }
+
+    /**
+     * @param array $array
+     */
+    protected function fromArray(array $array)
+    {
+        if(
+            array_key_exists('workerModules', $array)
+            && is_array($array['workerModules'])
+        ) {
+            foreach($array['workerModules'] as $name => $config) {
+                $this->workerModules[$name] = new WorkerModuleDefinition($name, (array)$config);
+            }
+        }
     }
 
 }

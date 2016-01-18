@@ -35,11 +35,11 @@ class ListCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $List = ModuleRegister::load();
+        $list = ModuleRegister::load();
 
         $output->writeln('Modules Listed:');
 
-        foreach($List->getWorkerModuleDefinitions() as $definition) {
+        foreach($list->getWorkerModuleDefinitions() as $definition) {
             $output->writeln($definition->getModuleName());
         }
 
