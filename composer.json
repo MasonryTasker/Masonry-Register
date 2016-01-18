@@ -20,6 +20,6 @@
     }
   },
   "bin": [
-    "masonry"
+    "src/bin/masonry-register"
   ]
 }
