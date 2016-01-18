@@ -9,8 +9,6 @@
 
 namespace Foundry\Masonry\ModuleRegister\Interfaces;
 
-use Foundry\Masonry\Interfaces\WorkerModuleInterface;
-
 /**
  * Interface ModuleRegister
  * ${CARET}
