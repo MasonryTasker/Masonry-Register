@@ -2,9 +2,9 @@
 /**
  * ModuleRegister.php
  * @author    Daniel Mason <daniel.mason@thefoundry.co.uk>
- * @copyright 2015 The Foundry Visionmongers
+ * @copyright 2016 The Foundry Visionmongers
  * @license   MIT
- * @see       https://github.com/TheFoundryVisionmongers/Masonry-Config
+ * @see       https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
 
 namespace Foundry\Masonry\ModuleRegister;
@@ -16,8 +16,9 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class ModuleRegister
- * @package Masonry-Config
- * @see     https://github.com/TheFoundryVisionmongers/Masonry-Config
+ * This is the register itself. This implementation stores everything in a yaml file.
+ * @package Masonry-Register
+ * @see     https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
 class ModuleRegister implements ModuleRegisterInterface
 {

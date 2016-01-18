@@ -1,5 +1,12 @@
 #!/usr/bin/env php
 <?php
+/**
+ * masonry-register
+ * @author    Daniel Mason <daniel.mason@thefoundry.co.uk>
+ * @copyright 2016 The Foundry Visionmongers
+ * @license   MIT
+ * @see       https://github.com/TheFoundryVisionmongers/Masonry-Register
+ */
 
 // Find composer autoload.
 $autoloadLocations = [
