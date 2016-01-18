@@ -28,8 +28,10 @@ require_once $composerLocation;
 
 // Start the app
 use Foundry\Masonry\ModuleRegister\RegisterCommand;
+use Foundry\Masonry\ModuleRegister\ListCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
 $application->add(new RegisterCommand());
+$application->add(new ListCommand());
 $application->run();
