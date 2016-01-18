@@ -9,6 +9,7 @@
 
 namespace Foundry\Masonry\ModuleRegister;
 
+use Foundry\Masonry\Interfaces\WorkerModuleInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -22,13 +23,16 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RegisterCommand extends Command
 {
+
+    const ARGUMENT_MODULE = 'module';
+
     protected function configure()
     {
         $this
             ->setName('register')
             ->setDescription('Register a module')
             ->addArgument(
-                'module',
+                static::ARGUMENT_MODULE,
                 InputArgument::REQUIRED,
                 'The fully qualified name of the module you are trying to install'
             )
@@ -38,6 +42,13 @@ class RegisterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $register = ModuleRegister::load();
-        $output->writeln("register");
+
+        $module = $input->getArgument(static::ARGUMENT_MODULE);
+        $register->addWorkerModule(
+            new WorkerModuleDefinition($module)
+        );
+        $register->save();
+
+        $output->writeln("Registered $module");
     }
 }
