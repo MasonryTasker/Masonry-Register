@@ -1,0 +1,22 @@
+{
+  "name": "foundry/masonry-register",
+  "description": "This application keeps track of installed modules",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Daniel Mason",
+      "email": "daniel.mason@thefoundry.co.uk"
+    }
+  ],
+  "require": {
+    "foundry/masonry": "dev-feature/Console",
+    "symfony/console": "^2.0",
+    "symfony/yaml": "^2.0"
+  },
+  "autoload" : {
+    "psr-4" : {
+      "Foundry\\Masonry\\ModuleRegister\\" : "src/"
+    }
+  }
+}
