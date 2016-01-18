@@ -1,9 +1,32 @@
 #!/usr/bin/env php
 <?php
-// application.php
 
-require __DIR__.'/../../vendor/autoload.php';
+// Find composer autoload.
+$autoloadLocations = [
+    __DIR__ . '/../../../../../vendor/autoload.php',
+    __DIR__ . '/../../../../vendor/autoload.php',
+    __DIR__ . '/../../../vendor/autoload.php',
+    __DIR__ . '/../../vendor/autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php',
+];
 
+$composerLocation = null;
+foreach ($autoloadLocations as $location) {
+    if (is_file($location)) {
+        $composerLocation = $location;
+        break;
+    }
+}
+
+if (!$composerLocation) {
+    die('Composer autoload could not be found');
+}
+
+// Load it
+require_once $composerLocation;
+
+// Start the app
 use Foundry\Masonry\ModuleRegister\RegisterCommand;
 use Symfony\Component\Console\Application;
 
