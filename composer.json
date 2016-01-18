@@ -18,5 +18,8 @@
     "psr-4" : {
       "Foundry\\Masonry\\ModuleRegister\\" : "src/"
     }
-  }
+  },
+  "bin": [
+    "masonry"
+  ]
 }
