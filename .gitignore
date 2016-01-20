@@ -1,2 +1,4 @@
 /vendor
+/reports
+/bin
 composer.lock
