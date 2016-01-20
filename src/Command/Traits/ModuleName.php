@@ -26,7 +26,7 @@ trait ModuleName
     /**
      * @return string
      */
-    protected function getModuleArgument()
+    protected function getModuleNameArgument()
     {
         return $this->moduleArgument;
     }
