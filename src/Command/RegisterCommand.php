@@ -7,8 +7,10 @@
  * @see       https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
 
-namespace Foundry\Masonry\ModuleRegister;
+namespace Foundry\Masonry\ModuleRegister\Command;
 
+use Foundry\Masonry\ModuleRegister\ModuleRegister;
+use Foundry\Masonry\ModuleRegister\WorkerModuleDefinition;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +26,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RegisterCommand extends Command
 {
 
-    const ARGUMENT_MODULE = 'module';
+    use Traits\ConfigValues;
+    use Traits\ModuleName;
+    use Traits\RegisterFile;
 
     protected function configure()
     {
@@ -32,20 +36,36 @@ class RegisterCommand extends Command
             ->setName('register')
             ->setDescription('Register a module')
             ->addArgument(
-                static::ARGUMENT_MODULE,
+                $this->getModuleArgument(),
                 InputArgument::REQUIRED,
                 'The fully qualified name of the module you are trying to install'
+            )
+            ->addOption(
+                $this->getRegisterFileOption(),
+                $this->getRegisterFileOption()[0],
+                InputArgument::OPTIONAL,
+                'Where the register file should be kept',
+                $this->getRegisterFileDefault()
+            )
+            ->addOption(
+                $this->getConfigValuesOption(),
+                $this->getConfigValuesOption()[0],
+                InputArgument::OPTIONAL,
+                'Any values that must be filled in for a particular module to function'
             )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $register = ModuleRegister::load();
 
-        $module = $input->getArgument(static::ARGUMENT_MODULE);
+        $module       = $input->getArgument($this->getModuleArgument());
+        $registerFile = $input->getOption($this->getRegisterFileOption());
+        $config       = explode(',',$input->getOption($this->getConfigValuesOption()));
+
+        $register = ModuleRegister::load($registerFile);
         $register->addWorkerModule(
-            new WorkerModuleDefinition($module)
+            new WorkerModuleDefinition($module, $config)
         );
         $register->save();
 

@@ -23,7 +23,7 @@ use Symfony\Component\Yaml\Yaml;
 class ModuleRegister implements ModuleRegisterInterface
 {
 
-    protected $fileLocation = __DIR__.'/../register/register.yaml';
+    protected $fileLocation;
 
     /**
      * @var WorkerModuleDefinitionInterface[]
@@ -34,11 +34,9 @@ class ModuleRegister implements ModuleRegisterInterface
      * ModuleRegister constructor.
      * @param string|null $fileLocation
      */
-    protected function __construct($fileLocation = null)
+    protected function __construct($fileLocation)
     {
-        if($fileLocation) {
-            $this->fileLocation = $fileLocation;
-        }
+        $this->fileLocation = $fileLocation;
     }
 
     /**
@@ -78,15 +76,15 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     public static function load($filename = null)
     {
-        $register = new static($filename);
-
         // Check the file exists. If not, create it
-        if(!file_exists($register->fileLocation)) {
-            touch($register->fileLocation);
+        if(!file_exists($filename)) {
+            touch($filename);
         }
 
         // Import the data to the object
-        $data = (array)Yaml::parse(file_get_contents($register->fileLocation));
+        $data = (array)Yaml::parse(file_get_contents($filename));
+
+        $register = new static($filename);
         $register->fromArray($data);
 
         return $register;
@@ -97,8 +95,12 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     protected function toArray()
     {
+        $workerModules = [];
+        foreach($this->workerModules as $module) {
+            $workerModules[$module->getModuleName()] = $module->getConfiguration();
+        }
         return [
-            'workerModules' => $this->workerModules
+            'workerModules' => $workerModules
         ];
     }
 

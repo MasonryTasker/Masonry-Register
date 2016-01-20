@@ -7,9 +7,11 @@
  * @see       https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
 
-namespace Foundry\Masonry\ModuleRegister;
+namespace Foundry\Masonry\ModuleRegister\Command;
 
+use Foundry\Masonry\ModuleRegister\ModuleRegister;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -22,26 +24,36 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ListCommand extends Command
 {
-
-    const ARGUMENT_MODULE = 'module';
+    use Traits\RegisterFile;
 
     protected function configure()
     {
         $this
             ->setName('list')
             ->setDescription('Lists currently registered modules')
+            ->addOption(
+                $this->getRegisterFileOption(),
+                $this->getRegisterFileOption()[0],
+                InputArgument::OPTIONAL,
+                'Where the register file should be kept',
+                $this->getRegisterFileDefault()
+            )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $list = ModuleRegister::load();
+        $registerFile = $input->getOption($this->getRegisterFileOption());
+
+        $list = ModuleRegister::load($registerFile);
 
         $output->writeln('Modules Listed:');
 
         foreach($list->getWorkerModuleDefinitions() as $definition) {
             $output->writeln($definition->getModuleName());
+            foreach($definition->getConfiguration() as $configValue) {
+                $output->writeln("  $configValue");
+            }
         }
-
     }
 }

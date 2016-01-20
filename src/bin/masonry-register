@@ -34,8 +34,8 @@ if (!$composerLocation) {
 require_once $composerLocation;
 
 // Start the app
-use Foundry\Masonry\ModuleRegister\RegisterCommand;
-use Foundry\Masonry\ModuleRegister\ListCommand;
+use Foundry\Masonry\ModuleRegister\Command\RegisterCommand;
+use Foundry\Masonry\ModuleRegister\Command\ListCommand;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
