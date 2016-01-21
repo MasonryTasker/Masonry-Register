@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "foundry/masonry": "dev-feature/Console",
+    "foundry/masonry": "dev-develop@dev",
     "symfony/console": "^2.0",
     "symfony/yaml": "^2.0"
   },
