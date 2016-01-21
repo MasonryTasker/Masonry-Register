@@ -21,7 +21,7 @@ trait RegisterFile
     /**
      * @var string
      */
-    private $registerFileArgument = 'file';
+    private $registerFileArgument = 'register-file';
 
     /**
      * @return string

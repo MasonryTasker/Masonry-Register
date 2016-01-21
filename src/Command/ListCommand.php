@@ -26,6 +26,10 @@ class ListCommand extends Command
 {
     use Traits\RegisterFile;
 
+    /**
+     * Configure the command
+     * @return void
+     */
     protected function configure()
     {
         $this
@@ -41,6 +45,12 @@ class ListCommand extends Command
         ;
     }
 
+    /**
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $registerFile = $input->getOption($this->getRegisterFileOption());
