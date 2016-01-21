@@ -36,7 +36,7 @@ class RegisterCommand extends Command
             ->setName('register')
             ->setDescription('Register a module')
             ->addArgument(
-                $this->getModuleArgument(),
+                $this->getModuleNameArgument(),
                 InputArgument::REQUIRED,
                 'The fully qualified name of the module you are trying to install'
             )
@@ -59,7 +59,7 @@ class RegisterCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 
-        $module       = $input->getArgument($this->getModuleArgument());
+        $module       = $input->getArgument($this->getModuleNameArgument());
         $registerFile = $input->getOption($this->getRegisterFileOption());
         $config       = explode(',',$input->getOption($this->getConfigValuesOption()));
 

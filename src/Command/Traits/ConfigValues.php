@@ -21,7 +21,7 @@ trait ConfigValues
     /**
      * @var string
      */
-    private $configValuesArgument = 'config';
+    private $configValuesArgument = 'config-values';
 
     /**
      * @return string
