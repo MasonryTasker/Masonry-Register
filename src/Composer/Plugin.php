@@ -14,6 +14,7 @@ use Composer\Config;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
+use Foundry\Masonry\ModuleRegister\WorkerModuleDefinition\YamlWorkerModuleDefinition;
 
 /**
  * Class Plugin
@@ -61,15 +62,9 @@ class Plugin implements PluginInterface
     protected function buildRegister(Composer $composer)
     {
         $vendorDir = $composer->getConfig()->get('vendor-dir');
+        $modules = [];
         foreach(glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
-            
-        }
-    }
-
-    protected function getDirectories(\DirectoryIterator $vendorDirectory)
-    {
-        foreach($vendorDirectory as $vendor) {
-            echo $vendor->current().PHP_EOL;
+            $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
         }
     }
 }
