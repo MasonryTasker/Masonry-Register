@@ -1,5 +1,6 @@
 {
   "name": "foundry/masonry-register",
+  "type": "composer-plugin",
   "description": "This application keeps track of installed modules",
   "minimum-stability": "stable",
   "license": "MIT",
@@ -10,7 +11,8 @@
     }
   ],
   "require": {
-    "foundry/masonry": "dev-develop@dev",
+    "composer-plugin-api": "^1.0",
+    "foundry/masonry": "*",
     "symfony/console": "^2.0",
     "symfony/yaml": "^2.0"
   },
@@ -40,5 +42,8 @@
     "github-protocols": [
       "https"
     ]
+  },
+  "extra": {
+    "class": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin"
   }
 }
