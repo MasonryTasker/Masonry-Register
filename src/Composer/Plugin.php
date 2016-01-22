@@ -10,8 +10,10 @@
 namespace Foundry\Masonry\ModuleRegister\Composer;
 
 use Composer\Composer;
+use Composer\Config;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\Event;
 
 /**
  * Class Plugin
@@ -39,6 +41,35 @@ class Plugin implements PluginInterface
     {
         $this->composer = $composer;
         $this->io = $io;
-        var_dump($composer);
+
+        $this->buildRegister($composer);
+    }
+
+    /**
+     * Test the plugin by running `composer run-script test`
+     * @param Event $event
+     */
+    public static function test(Event $event)
+    {
+        $plugin = new static();
+        $plugin->activate($event->getComposer(), $event->getIO());
+    }
+
+    /**
+     * @param Composer $composer
+     */
+    protected function buildRegister(Composer $composer)
+    {
+        $vendorDir = $composer->getConfig()->get('vendor-dir');
+        foreach(glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
+            
+        }
+    }
+
+    protected function getDirectories(\DirectoryIterator $vendorDirectory)
+    {
+        foreach($vendorDirectory as $vendor) {
+            echo $vendor->current().PHP_EOL;
+        }
     }
 }
