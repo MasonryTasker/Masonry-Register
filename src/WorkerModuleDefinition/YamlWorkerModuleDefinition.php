@@ -21,12 +21,6 @@ use Symfony\Component\Yaml\Yaml as YamlReader;
 class YamlWorkerModuleDefinition extends WorkerModuleDefinition
 {
 
-    protected static $moduleKeys = [
-        'workers',
-        'descriptions',
-        'config',
-    ];
-
     /**
      * Load a module definition
      * @param $file
@@ -38,43 +32,15 @@ class YamlWorkerModuleDefinition extends WorkerModuleDefinition
             throw new \InvalidArgumentException("File '$file' does not exist");
         }
         $data = (array)YamlReader::parse(file_get_contents($file));
-        $data = static::flattenKeys($data);
-
-        $missingKeys = static::getMissingKeys($data);
-        if($missingKeys) {
-            throw new \RuntimeException("Invalid module definition $file, missing keys: ". implode(',', $missingKeys));
+        try {
+            return static::fromArray($data);
+        } catch (\Exception $exception) {
+            throw new \RuntimeException(
+                "Unable to load module from file '$file'" . PHP_EOL . $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
         }
-
-        return new static($data['workers'], $data['description'], $data['config']);
-    }
-
-    /**
-     * Gets a list of any missing keys
-     * @param array $moduleDefinition
-     * @return array Any missing keys
-     */
-    protected static function getMissingKeys(array $moduleDefinition)
-    {
-        $missing = [];
-        foreach(static::$moduleKeys as $key) {
-            if(!array_key_exists($key, $moduleDefinition)) {
-                $missing[] = $key;
-            }
-        }
-        return $missing;
-    }
-
-    /**
-     * @param array $array
-     * @return array
-     */
-    protected static function flattenKeys(array $array)
-    {
-        $newArray = [];
-        foreach ($array as $key => $value) {
-            $newArray[strtolower($key)] = $value;
-        }
-        return $newArray;
     }
 
 }
