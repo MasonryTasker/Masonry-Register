@@ -58,7 +58,7 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     public function addWorkerModule(WorkerModuleDefinitionInterface $module)
     {
-        $this->workerModules[$module->getModuleName()] = $module;
+        $this->workerModules[$module->getName()] = $module;
     }
 
     /**
@@ -114,7 +114,7 @@ class ModuleRegister implements ModuleRegisterInterface
     {
         $workerModules = [];
         foreach($this->workerModules as $module) {
-            $workerModules[$module->getModuleName()] = [
+            $workerModules[$module->getName()] = [
                 WorkerModuleDefinition::KEY_WORKERS => $module->getWorkers(),
                 WorkerModuleDefinition::KEY_DESCRIPTIONS => $module->getDescriptions(),
                 WorkerModuleDefinition::KEY_EXTRA => $module->getExtra(),
