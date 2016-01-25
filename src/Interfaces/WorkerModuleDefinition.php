@@ -20,21 +20,12 @@ use Foundry\Masonry\Interfaces\WorkerModuleInterface;
 interface WorkerModuleDefinition
 {
 
-    public function __construct($moduleName);
+    public function getWorkers();
 
-    /**
-     * @return string
-     */
+    public function getDescriptions();
+
+    public function getConfigurationKeys();
+
     public function getModuleName();
-
-    /**
-     * @return WorkerModuleInterface
-     */
-    public function getModule();
-
-    /**
-     * @return array
-     */
-    public function getConfiguration();
 
 }
