@@ -49,6 +49,11 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     protected $configurationKeys = [];
 
     /**
+     * @var $moduleName
+     */
+    protected $moduleName;
+
+    /**
      * WorkerModuleDefinition constructor.
      * @param string[] $workers
      * @param string[] $descriptions
@@ -62,6 +67,17 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     }
 
     /**
+     * @return mixed
+     */
+    public function getModuleName()
+    {
+        if(!$this->moduleName) {
+            throw new \LogicException('Module was never named');
+        }
+        return $this->moduleName;
+    }
+
+    /**
      * Create a new module definition from an array of data
      * @param array $definition
      * @return static
@@ -72,9 +88,9 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
             throw new \RuntimeException('Unknown error happened while validating module array data');
         }
         return new static(
-            $definition[static::KEY_WORKERS],
-            $definition[static::KEY_DESCRIPTIONS],
-            $definition[static::KEY_CONFIG]
+            (array)$definition[static::KEY_WORKERS],
+            (array)$definition[static::KEY_DESCRIPTIONS],
+            (array)$definition[static::KEY_CONFIG]
         );
     }
 

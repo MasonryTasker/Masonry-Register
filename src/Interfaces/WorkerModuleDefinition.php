@@ -26,4 +26,6 @@ interface WorkerModuleDefinition
 
     public function getConfigurationKeys();
 
+    public function getModuleName();
+
 }

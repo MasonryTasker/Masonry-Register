@@ -33,7 +33,9 @@ class YamlWorkerModuleDefinition extends WorkerModuleDefinition
         }
         $data = (array)YamlReader::parse(file_get_contents($file));
         try {
-            return static::fromArray($data);
+            $static = static::fromArray($data);
+            $static->moduleName = $file;
+            return $static;
         } catch (\Exception $exception) {
             throw new \RuntimeException(
                 "Unable to load module from file '$file'" . PHP_EOL . $exception->getMessage(),

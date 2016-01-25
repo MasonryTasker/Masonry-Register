@@ -34,7 +34,7 @@ class ModuleRegister implements ModuleRegisterInterface
      * ModuleRegister constructor.
      * @param string|null $fileLocation
      */
-    protected function __construct($fileLocation)
+    public function __construct($fileLocation)
     {
         $this->fileLocation = $fileLocation;
     }
@@ -55,6 +55,18 @@ class ModuleRegister implements ModuleRegisterInterface
     public function addWorkerModule(WorkerModuleDefinitionInterface $module)
     {
         $this->workerModules[$module->getModuleName()] = $module;
+    }
+
+    /**
+     * @param WorkerModuleDefinitionInterface[] $modules An array of modules to be added
+     * @throws \Exception If a problem occurs.
+     * @return $this
+     */
+    public function addWorkerModules(array $modules)
+    {
+        foreach($modules as $module) {
+            $this->addWorkerModule($module);
+        }
     }
 
     /**
@@ -97,7 +109,7 @@ class ModuleRegister implements ModuleRegisterInterface
     {
         $workerModules = [];
         foreach($this->workerModules as $module) {
-            $workerModules[$module->getModuleName()] = $module->getConfiguration();
+            $workerModules[$module->getModuleName()] = $module->getConfigurationKeys();
         }
         return [
             'workerModules' => $workerModules
