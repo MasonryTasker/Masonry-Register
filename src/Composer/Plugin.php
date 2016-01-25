@@ -119,6 +119,7 @@ class Plugin implements PluginInterface
             }
             catch(\Exception $e) {
                 $this->io->writeError("<error>Invalid module:</error> $masonryConfig");
+                $this->io->writeError("== {$e->getMessage()}");
             }
         }
         $register = new ModuleRegister($fileLocation);
