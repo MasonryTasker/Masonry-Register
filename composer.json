@@ -35,7 +35,6 @@
     }
   },
   "config": {
-    "bin-dir": "bin",
     "github-protocols": [
       "https"
     ]
@@ -44,7 +43,11 @@
     "class": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin"
   },
   "scripts": {
-    "test": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::test",
+    "quality": [
+      "vendor/bin/phpcpd src",
+      "vendor/bin/phpcs --standard=phpcs.xml src",
+      "vendor/bin/phpmd src text phpmd.xml"
+    ],
     "validate-masonry": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::validate"
   }
 }

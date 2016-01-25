@@ -57,5 +57,4 @@ class YamlWorkerModuleDefinition extends WorkerModuleDefinition
         }
         return $newArray;
     }
-
 }

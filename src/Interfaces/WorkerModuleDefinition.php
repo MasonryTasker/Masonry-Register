@@ -27,5 +27,4 @@ interface WorkerModuleDefinition
     public function getDescriptions();
 
     public function getExtra();
-
 }
