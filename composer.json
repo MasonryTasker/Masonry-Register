@@ -48,6 +48,6 @@
   },
   "scripts": {
     "test": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::test",
-    "validate-config": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::validate"
+    "validate-masonry": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::validate"
   }
 }

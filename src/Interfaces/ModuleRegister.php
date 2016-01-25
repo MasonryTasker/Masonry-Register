@@ -37,11 +37,11 @@ interface ModuleRegister
     public function save();
 
     /**
-     * @param string $filename Which file to load from
+     * @param string $fileLocation Which file to load from
      * @throws \Exception If the file can not be loaded.
      * @return $this
      */
-    public static function load($filename = null);
+    public static function load($fileLocation = null);
 
 
 }
