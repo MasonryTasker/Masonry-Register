@@ -11,6 +11,7 @@ namespace Foundry\Masonry\ModuleRegister\Composer;
 
 use Composer\Composer;
 use Composer\Config;
+use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
 use Composer\Plugin\PluginEvents;
 use Composer\Plugin\PluginInterface;
@@ -24,7 +25,7 @@ use Foundry\Masonry\ModuleRegister\WorkerModuleDefinition\YamlWorkerModuleDefini
  * @package Masonry-Register
  * @see     https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
-class Plugin implements PluginInterface
+class Plugin implements PluginInterface, EventSubscriberInterface
 {
     /**
      * @var Composer
