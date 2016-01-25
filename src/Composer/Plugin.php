@@ -76,9 +76,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            PluginEvents::COMMAND => [
-                ['onPostAutoloadDump' => 0]
-            ]
+            'post-autoload-dump' => 'onPostAutoloadDump',
         ];
     }
 
