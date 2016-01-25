@@ -11,7 +11,9 @@ namespace Foundry\Masonry\ModuleRegister\Composer;
 
 use Composer\Composer;
 use Composer\Config;
+use Composer\EventDispatcher\EventSubscriberInterface;
 use Composer\IO\IOInterface;
+use Composer\Plugin\PluginEvents;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Foundry\Masonry\ModuleRegister\ModuleRegister;
@@ -23,7 +25,7 @@ use Foundry\Masonry\ModuleRegister\WorkerModuleDefinition\YamlWorkerModuleDefini
  * @package Masonry-Register
  * @see     https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
-class Plugin implements PluginInterface
+class Plugin implements PluginInterface, EventSubscriberInterface
 {
     /**
      * @var Composer
@@ -43,7 +45,6 @@ class Plugin implements PluginInterface
     {
         $this->composer = $composer;
         $this->io = $io;
-        $this->buildRegister();
     }
 
     /**
@@ -54,6 +55,30 @@ class Plugin implements PluginInterface
     {
         $plugin = new static();
         $plugin->activate($event->getComposer(), $event->getIO());
+        $plugin->onPostAutoloadDump($event);
+    }
+
+    /**
+     * Build the register once the autoloader has been dumped
+     * @param Event $event
+     */
+    public function onPostAutoloadDump(Event $event)
+    {
+        $event->getIO()->write('Masonry Registry build started:');
+        $this->requireAutoload($event->getComposer());
+        $this->buildRegister();
+    }
+
+    /**
+     * Some kind of poorly documented magic.
+     * Ideally we only want to run once the auto loader exists, not before.
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            'post-autoload-dump' => 'onPostAutoloadDump',
+        ];
     }
 
     /**
@@ -94,10 +119,21 @@ class Plugin implements PluginInterface
             }
             catch(\Exception $e) {
                 $this->io->writeError("<error>Invalid module:</error> $masonryConfig");
+                $this->io->writeError("== {$e->getMessage()}");
             }
         }
         $register = new ModuleRegister($fileLocation);
         $register->addWorkerModules($modules);
         $register->save();
+    }
+
+    /**
+     * Require the autoloader
+     * @param Composer $composer
+     */
+    protected function requireAutoload(Composer $composer)
+    {
+        $vendorDir = $composer->getConfig()->get('vendor-dir');
+        require_once "$vendorDir/autoload.php";
     }
 }
