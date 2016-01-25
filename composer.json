@@ -34,9 +34,6 @@
       "Foundry\\Masonry\\ModuleRegister\\Test\\" : "test/"
     }
   },
-  "bin": [
-    "src/bin/masonry-register"
-  ],
   "config": {
     "bin-dir": "bin",
     "github-protocols": [
