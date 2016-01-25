@@ -1,5 +1,6 @@
 {
   "name": "foundry/masonry-register",
+  "type": "composer-plugin",
   "description": "This application keeps track of installed modules",
   "minimum-stability": "stable",
   "license": "MIT",
@@ -10,9 +11,10 @@
     }
   ],
   "require": {
-    "foundry/masonry": "dev-develop@dev",
-    "symfony/console": "^2.0",
-    "symfony/yaml": "^2.0"
+    "composer-plugin-api": "^1.0",
+    "symfony/yaml": "^2.0",
+    "foundry/masonry": "dev-feature/Register@dev",
+    "foundry/masonry-module-filesystem": "*@dev"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.8.21",
@@ -20,7 +22,8 @@
     "phpmd/phpmd": "^2.2",
     "phploc/phploc": "^2.1",
     "pdepend/pdepend": "2.1",
-    "sebastian/phpcpd": "^2.0"
+    "sebastian/phpcpd": "^2.0",
+    "composer/composer": "^1.0.0@dev"
   },
   "autoload" : {
     "psr-4" : {
@@ -40,5 +43,12 @@
     "github-protocols": [
       "https"
     ]
+  },
+  "extra": {
+    "class": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin"
+  },
+  "scripts": {
+    "test": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::test",
+    "validate-config": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::validate"
   }
 }
