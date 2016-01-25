@@ -64,7 +64,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function onPostAutoloadDump(Event $event)
     {
-        $event->getIO()->write('Masonry Registry build started.');
+        $event->getIO()->write('Masonry Registry build started:');
+        $this->requireAutoload($event->getComposer());
         $this->buildRegister();
     }
 
@@ -124,5 +125,15 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $register = new ModuleRegister($fileLocation);
         $register->addWorkerModules($modules);
         $register->save();
+    }
+
+    /**
+     * Require the autoloader
+     * @param Composer $composer
+     */
+    protected function requireAutoload(Composer $composer)
+    {
+        $vendorDir = $composer->getConfig()->get('vendor-dir');
+        require_once "$vendorDir/autoload.php";
     }
 }
