@@ -42,6 +42,4 @@ interface ModuleRegister
      * @return $this
      */
     public static function load($fileLocation = null);
-
-
 }

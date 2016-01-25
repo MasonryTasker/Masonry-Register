@@ -37,7 +37,7 @@ class ModuleRegister implements ModuleRegisterInterface
     public function __construct($fileLocation = null)
     {
         // Default location
-        if(null === $fileLocation) {
+        if (null === $fileLocation) {
             $fileLocation = __DIR__.'/../register/register.yaml';
         }
         $this->fileLocation = $fileLocation;
@@ -58,7 +58,7 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     public function addWorkerModule(WorkerModuleDefinitionInterface $module)
     {
-        $this->workerModules[$module->getModuleName()] = $module;
+        $this->workerModules[$module->getName()] = $module;
     }
 
     /**
@@ -68,7 +68,7 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     public function addWorkerModules(array $modules)
     {
-        foreach($modules as $module) {
+        foreach ($modules as $module) {
             $this->addWorkerModule($module);
         }
     }
@@ -95,7 +95,7 @@ class ModuleRegister implements ModuleRegisterInterface
         $register = new static($fileLocation);
 
         // Check the file exists. If not, create it
-        if(!file_exists($register->fileLocation)) {
+        if (!file_exists($register->fileLocation)) {
             touch($register->fileLocation);
         }
 
@@ -113,11 +113,11 @@ class ModuleRegister implements ModuleRegisterInterface
     protected function toArray()
     {
         $workerModules = [];
-        foreach($this->workerModules as $module) {
-            $workerModules[$module->getModuleName()] = [
+        foreach ($this->workerModules as $module) {
+            $workerModules[$module->getName()] = [
                 WorkerModuleDefinition::KEY_WORKERS => $module->getWorkers(),
                 WorkerModuleDefinition::KEY_DESCRIPTIONS => $module->getDescriptions(),
-                WorkerModuleDefinition::KEY_CONFIG => $module->getConfigurationKeys(),
+                WorkerModuleDefinition::KEY_EXTRA => $module->getExtra(),
             ];
         }
         return [
@@ -130,18 +130,16 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     protected function fromArray(array $array)
     {
-        if(
-            array_key_exists('workerModules', $array)
+        if (array_key_exists('workerModules', $array)
             && is_array($array['workerModules'])
         ) {
-            foreach($array['workerModules'] as $name => $module) {
+            foreach ($array['workerModules'] as $name => $module) {
                 $this->workerModules[$name] = new WorkerModuleDefinition(
                     (array)$module[WorkerModuleDefinition::KEY_WORKERS],
                     (array)$module[WorkerModuleDefinition::KEY_DESCRIPTIONS],
-                    (array)$module[WorkerModuleDefinition::KEY_CONFIG]
+                    (array)$module[WorkerModuleDefinition::KEY_EXTRA]
                 );
             }
         }
     }
-
 }

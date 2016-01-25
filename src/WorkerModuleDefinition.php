@@ -13,7 +13,6 @@ use Foundry\Masonry\Interfaces\Task\DescriptionInterface;
 use Foundry\Masonry\Interfaces\WorkerInterface;
 use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinition as WorkerModuleDefinitionInterface;
 
-
 /**
  * Class WorkerModuleDefinition
  *
@@ -23,15 +22,21 @@ use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinition as WorkerMo
 class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
 {
 
+    const KEY_NAME = 'name';
     const KEY_WORKERS = 'workers';
     const KEY_DESCRIPTIONS = 'descriptions';
-    const KEY_CONFIG = 'config';
+    const KEY_EXTRA = 'extra';
 
     protected static $moduleKeys = [
         self::KEY_WORKERS,
         self::KEY_DESCRIPTIONS,
-        self::KEY_CONFIG,
+        self::KEY_EXTRA,
     ];
+
+    /**
+     * @var $name
+     */
+    protected $name;
 
     /**
      * @var string[]
@@ -44,37 +49,34 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     protected $descriptions = [];
 
     /**
-     * @var string[]
+     * @var array
      */
-    protected $configurationKeys = [];
-
-    /**
-     * @var $moduleName
-     */
-    protected $moduleName;
+    protected $extra = [];
 
     /**
      * WorkerModuleDefinition constructor.
+     * @param string $name
      * @param string[] $workers
      * @param string[] $descriptions
-     * @param string[] $configurationKeys
+     * @param string[] $extra
      */
-    public function __construct(array $workers, array $descriptions, array $configurationKeys = [])
+    public function __construct($name, array $workers, array $descriptions, array $extra = [])
     {
+        $this->name = $name;
         $this->workers = $workers;
         $this->descriptions = $descriptions;
-        $this->configurationKeys = $configurationKeys;
+        $this->extra = $extra;
     }
 
     /**
      * @return mixed
      */
-    public function getModuleName()
+    public function getName()
     {
-        if(!$this->moduleName) {
+        if (!$this->name) {
             throw new \LogicException('Module was never named');
         }
-        return $this->moduleName;
+        return $this->name;
     }
 
     /**
@@ -87,11 +89,13 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
         if (!static::validateArray($definition)) {
             throw new \RuntimeException('Unknown error happened while validating module array data');
         }
-        return new static(
-            (array)$definition[static::KEY_WORKERS],
-            (array)$definition[static::KEY_DESCRIPTIONS],
-            (array)$definition[static::KEY_CONFIG]
-        );
+
+        $name = $definition[static::KEY_NAME];
+        $workers = (array)$definition[static::KEY_WORKERS];
+        $description = (array)$definition[static::KEY_DESCRIPTIONS];
+        $extra = array_key_exists(static::KEY_EXTRA, $definition) ? (array)$definition[static::KEY_EXTRA] : [];
+
+        return new static($name, $workers, $description, $extra);
     }
 
     /**
@@ -113,7 +117,7 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
 
             // Check there are even workers
             if (!array_key_exists($key, $definition)) {
-                return $key . ' key does not exist';
+                return $key . ' key is missing';
             }
 
             // Check all workers are included
@@ -140,7 +144,7 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
 
             // Check there are even descriptions
             if (!array_key_exists($key, $definition)) {
-                return $key . ' key does not exist';
+                return $key . ' key is missing';
             }
 
             // Check all descriptions are included
@@ -161,28 +165,33 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
          * @param array $definition
          * @return bool|string
          */
-        $getConfigErrors = function (array $definition) {
-            $key = static::KEY_CONFIG;
+        $getNameErrors = function (array $definition) {
+            $key = static::KEY_NAME;
 
             // Check there are even configs
             if (!array_key_exists($key, $definition)) {
-                return $key . ' key does not exist';
+                return $key . ' key is missing';
             }
+
+            if (!is_string($definition[$key])) {
+                return $key . ' must be a string';
+            }
+
             return false;
         };
 
         $errors = [];
         $workerErrors = $getWorkerErrors($definition);
         $descriptionErrors = $getDescriptionErrors($definition);
-        $configErrors = $getConfigErrors($definition);
+        $nameErrors = $getNameErrors($definition);
         if ($workerErrors) {
             $errors[] = $workerErrors;
         }
         if ($descriptionErrors) {
             $errors[] = $descriptionErrors;
         }
-        if ($configErrors) {
-            $errors[] = $configErrors;
+        if ($nameErrors) {
+            $errors[] = $nameErrors;
         }
 
         if ($errors) {
@@ -213,8 +222,8 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     /**
      * @return string[]
      */
-    public function getConfigurationKeys()
+    public function getExtra()
     {
-        return $this->configurationKeys;
+        return $this->extra;
     }
 }
