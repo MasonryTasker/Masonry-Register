@@ -117,7 +117,7 @@ class ModuleRegister implements ModuleRegisterInterface
             $workerModules[$module->getModuleName()] = [
                 WorkerModuleDefinition::KEY_WORKERS => $module->getWorkers(),
                 WorkerModuleDefinition::KEY_DESCRIPTIONS => $module->getDescriptions(),
-                WorkerModuleDefinition::KEY_CONFIG => $module->getConfigurationKeys(),
+                WorkerModuleDefinition::KEY_EXTRA => $module->getExtra(),
             ];
         }
         return [
@@ -138,7 +138,7 @@ class ModuleRegister implements ModuleRegisterInterface
                 $this->workerModules[$name] = new WorkerModuleDefinition(
                     (array)$module[WorkerModuleDefinition::KEY_WORKERS],
                     (array)$module[WorkerModuleDefinition::KEY_DESCRIPTIONS],
-                    (array)$module[WorkerModuleDefinition::KEY_CONFIG]
+                    (array)$module[WorkerModuleDefinition::KEY_EXTRA]
                 );
             }
         }
