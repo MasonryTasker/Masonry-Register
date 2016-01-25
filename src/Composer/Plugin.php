@@ -43,8 +43,7 @@ class Plugin implements PluginInterface
     {
         $this->composer = $composer;
         $this->io = $io;
-
-        $this->buildRegister($composer);
+        $this->buildRegister();
     }
 
     /**
@@ -82,15 +81,20 @@ class Plugin implements PluginInterface
     }
 
     /**
-     * @param Composer $composer
      * @param string|null $fileLocation
      */
-    protected function buildRegister(Composer $composer, $fileLocation = null)
+    protected function buildRegister($fileLocation = null)
     {
-        $vendorDir = $composer->getConfig()->get('vendor-dir');
+        $vendorDir = $this->composer->getConfig()->get('vendor-dir');
         $modules = [];
         foreach(glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
-            $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
+            try {
+                $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
+                $this->io->write("<info>Added module:</info> $masonryConfig");
+            }
+            catch(\Exception $e) {
+                $this->io->writeError("<error>Invalid module:</error> $masonryConfig");
+            }
         }
         $register = new ModuleRegister($fileLocation);
         $register->addWorkerModules($modules);
