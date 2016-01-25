@@ -54,7 +54,7 @@ class Plugin implements PluginInterface
     }
 
     /**
-     * Test the plugin by running `composer run-script test`
+     * Test the plugin by running `composer test`
      * @param Event $event
      */
     public static function test(Event $event)
@@ -63,6 +63,10 @@ class Plugin implements PluginInterface
         $plugin->activate($event->getComposer(), $event->getIO());
     }
 
+    /**
+     * Run with composer validate-masonry
+     * @param Event $event
+     */
     public static function validate(Event $event)
     {
         $configFile = '';
