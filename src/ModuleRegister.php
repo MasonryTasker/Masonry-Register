@@ -34,8 +34,12 @@ class ModuleRegister implements ModuleRegisterInterface
      * ModuleRegister constructor.
      * @param string|null $fileLocation
      */
-    public function __construct($fileLocation)
+    public function __construct($fileLocation = null)
     {
+        // Default location
+        if(null === $fileLocation) {
+            $fileLocation = __DIR__.'/../register/register.yaml';
+        }
         $this->fileLocation = $fileLocation;
     }
 
@@ -82,21 +86,22 @@ class ModuleRegister implements ModuleRegisterInterface
     }
 
     /**
-     * @param string $filename Which file to load from
+     * @param string $fileLocation Which file to load from
      * @throws \Exception If the file can not be loaded.
      * @return $this
      */
-    public static function load($filename = null)
+    public static function load($fileLocation = null)
     {
+        $register = new static($fileLocation);
+
         // Check the file exists. If not, create it
-        if(!file_exists($filename)) {
-            touch($filename);
+        if(!file_exists($register->fileLocation)) {
+            touch($register->fileLocation);
         }
 
         // Import the data to the object
-        $data = (array)Yaml::parse(file_get_contents($filename));
+        $data = (array)Yaml::parse(file_get_contents($register->fileLocation));
 
-        $register = new static($filename);
         $register->fromArray($data);
 
         return $register;

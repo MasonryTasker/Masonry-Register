@@ -43,18 +43,11 @@ class Plugin implements PluginInterface
     {
         $this->composer = $composer;
         $this->io = $io;
-
-        //require_once $composer->getConfig()->get('vendor-dir') . '/autoload.php';
-        $registerLocation = __DIR__.'/../../register/register.yaml';
-        if(!is_file($registerLocation)) {
-            touch($registerLocation);
-        }
-
-        $this->buildRegister($composer, $registerLocation);
+        $this->buildRegister();
     }
 
     /**
-     * Test the plugin by running `composer run-script test`
+     * Test the plugin by running `composer test`
      * @param Event $event
      */
     public static function test(Event $event)
@@ -63,6 +56,10 @@ class Plugin implements PluginInterface
         $plugin->activate($event->getComposer(), $event->getIO());
     }
 
+    /**
+     * Run with composer validate-masonry
+     * @param Event $event
+     */
     public static function validate(Event $event)
     {
         $configFile = '';
@@ -84,15 +81,20 @@ class Plugin implements PluginInterface
     }
 
     /**
-     * @param Composer $composer
-     * @param string $fileLocation
+     * @param string|null $fileLocation
      */
-    protected function buildRegister(Composer $composer, $fileLocation)
+    protected function buildRegister($fileLocation = null)
     {
-        $vendorDir = $composer->getConfig()->get('vendor-dir');
+        $vendorDir = $this->composer->getConfig()->get('vendor-dir');
         $modules = [];
         foreach(glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
-            $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
+            try {
+                $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
+                $this->io->write("<info>Added module:</info> $masonryConfig");
+            }
+            catch(\Exception $e) {
+                $this->io->writeError("<error>Invalid module:</error> $masonryConfig");
+            }
         }
         $register = new ModuleRegister($fileLocation);
         $register->addWorkerModules($modules);
