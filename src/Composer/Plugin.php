@@ -89,12 +89,12 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $configFile = '';
         $localYaml = getcwd().'/masonry.yaml';
-        if(is_file($localYaml)) {
+        if (is_file($localYaml)) {
             $configFile = $localYaml;
         }
-        if(array_key_exists(0, $event->getArguments())) {
+        if (array_key_exists(0, $event->getArguments())) {
             $configFile = $event->getArguments()[0];
-            if(!is_file($configFile)) {
+            if (!is_file($configFile)) {
                 throw new \InvalidArgumentException("'$configFile' is not a Module configuration file");
             }
         }
@@ -112,12 +112,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $vendorDir = $this->composer->getConfig()->get('vendor-dir');
         $modules = [];
-        foreach(glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
+        foreach (glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
             try {
                 $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
                 $this->io->write("<info>Added module:</info> $masonryConfig");
-            }
-            catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $this->io->writeError("<error>Invalid module:</error> $masonryConfig");
                 $this->io->writeError("== {$e->getMessage()}");
             }

@@ -13,7 +13,6 @@ use Foundry\Masonry\Interfaces\Task\DescriptionInterface;
 use Foundry\Masonry\Interfaces\WorkerInterface;
 use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinition as WorkerModuleDefinitionInterface;
 
-
 /**
  * Class WorkerModuleDefinition
  *
