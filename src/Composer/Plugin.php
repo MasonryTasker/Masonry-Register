@@ -12,6 +12,7 @@ namespace Foundry\Masonry\ModuleRegister\Composer;
 use Composer\Composer;
 use Composer\Config;
 use Composer\IO\IOInterface;
+use Composer\Plugin\PluginEvents;
 use Composer\Plugin\PluginInterface;
 use Composer\Script\Event;
 use Foundry\Masonry\ModuleRegister\ModuleRegister;
@@ -43,7 +44,6 @@ class Plugin implements PluginInterface
     {
         $this->composer = $composer;
         $this->io = $io;
-        $this->buildRegister();
     }
 
     /**
@@ -54,6 +54,31 @@ class Plugin implements PluginInterface
     {
         $plugin = new static();
         $plugin->activate($event->getComposer(), $event->getIO());
+        $plugin->onPostAutoloadDump($event);
+    }
+
+    /**
+     * Build the register once the autoloader has been dumped
+     * @param Event $event
+     */
+    public function onPostAutoloadDump(Event $event)
+    {
+        $event->getIO()->write('Masonry Registry build started.');
+        $this->buildRegister();
+    }
+
+    /**
+     * Some kind of poorly documented magic.
+     * Ideally we only want to run once the auto loader exists, not before.
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            PluginEvents::COMMAND => [
+                ['onPostAutoloadDump' => 0]
+            ]
+        ];
     }
 
     /**
