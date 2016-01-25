@@ -63,6 +63,26 @@ class Plugin implements PluginInterface
         $plugin->activate($event->getComposer(), $event->getIO());
     }
 
+    public static function validate(Event $event)
+    {
+        $configFile = '';
+        $localYaml = getcwd().'/masonry.yaml';
+        if(is_file($localYaml)) {
+            $configFile = $localYaml;
+        }
+        if(array_key_exists(0, $event->getArguments())) {
+            $configFile = $event->getArguments()[0];
+            if(!is_file($configFile)) {
+                throw new \InvalidArgumentException("'$configFile' is not a Module configuration file");
+            }
+        }
+
+        // Validate
+        YamlWorkerModuleDefinition::load($configFile);
+
+        $event->getIO()->write("Module file '$configFile' is valid");
+    }
+
     /**
      * @param Composer $composer
      * @param string $fileLocation

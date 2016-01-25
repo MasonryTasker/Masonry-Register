@@ -13,7 +13,8 @@
   "require": {
     "composer-plugin-api": "^1.0",
     "symfony/yaml": "^2.0",
-    "foundry/masonry": "*"
+    "foundry/masonry": "dev-feature/Register@dev",
+    "foundry/masonry-module-filesystem": "*@dev"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.8.21",
@@ -22,7 +23,7 @@
     "phploc/phploc": "^2.1",
     "pdepend/pdepend": "2.1",
     "sebastian/phpcpd": "^2.0",
-    "composer/composer": "dev-master@dev"
+    "composer/composer": "^1.0.0@dev"
   },
   "autoload" : {
     "psr-4" : {
@@ -47,6 +48,7 @@
     "class": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin"
   },
   "scripts": {
-    "test": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::test"
+    "test": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::test",
+    "validate-config": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::validate"
   }
 }
