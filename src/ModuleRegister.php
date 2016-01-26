@@ -62,6 +62,19 @@ class ModuleRegister implements ModuleRegisterInterface
     }
 
     /**
+     * Get a named module
+     * @param $name
+     * @return WorkerModuleDefinitionInterface
+     */
+    public function getWorkerModule($name)
+    {
+        if(array_key_exists($name, $this->workerModules)) {
+            return $this->workerModules[$name];
+        }
+        throw new \RuntimeException("Could not find module named '{$name}'");
+    }
+
+    /**
      * @param WorkerModuleDefinitionInterface[] $modules An array of modules to be added
      * @throws \Exception If a problem occurs.
      * @return $this
