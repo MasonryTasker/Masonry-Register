@@ -48,6 +48,9 @@
       "vendor/bin/phpcs --standard=phpcs.xml src",
       "vendor/bin/phpmd src text phpmd.xml"
     ],
+    "test": [
+      "vendor/bin/phpunit"
+    ],
     "validate-masonry": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::validate"
   }
 }
