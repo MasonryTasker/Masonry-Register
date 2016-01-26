@@ -59,6 +59,7 @@ class ModuleRegister implements ModuleRegisterInterface
     public function addWorkerModule(WorkerModuleDefinitionInterface $module)
     {
         $this->workerModules[$module->getName()] = $module;
+        return $this;
     }
 
     /**
@@ -84,6 +85,7 @@ class ModuleRegister implements ModuleRegisterInterface
         foreach ($modules as $module) {
             $this->addWorkerModule($module);
         }
+        return $this;
     }
 
     /**
@@ -140,6 +142,7 @@ class ModuleRegister implements ModuleRegisterInterface
 
     /**
      * @param array $array
+     * @return $this
      */
     protected function fromArray(array $array)
     {
@@ -154,5 +157,6 @@ class ModuleRegister implements ModuleRegisterInterface
                 );
             }
         }
+        return $this;
     }
 }
