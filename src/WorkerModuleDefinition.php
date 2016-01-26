@@ -220,6 +220,33 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     }
 
     /**
+     * Get the name of a description class based on a name or alias
+     * @param $nameOrAlias
+     * @return string
+     */
+    public function lookupDescription($nameOrAlias)
+    {
+        // It might already be the right class
+        if(array_key_exists($nameOrAlias, $this->descriptions)) {
+            return $nameOrAlias;
+        }
+
+        // If it isn't, we should look it up.
+        foreach($this->descriptions as $description => $aliases) {
+            if(is_array($aliases)) {
+                foreach($aliases as $alias) {
+                    if ($nameOrAlias === $alias) {
+                        return $description;
+                    }
+                }
+            }
+        }
+
+        // If we haven't found it by now, we're not going to.
+        throw new \RuntimeException("No description could be found matching {$this->getName()}/{$nameOrAlias}");
+    }
+
+    /**
      * @return string[]
      */
     public function getExtra()
