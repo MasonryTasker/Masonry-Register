@@ -9,8 +9,8 @@
 
 namespace Foundry\Masonry\ModuleRegister;
 
-use Foundry\Masonry\ModuleRegister\Interfaces\ModuleRegister as ModuleRegisterInterface;
-use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinition as WorkerModuleDefinitionInterface;
+use Foundry\Masonry\ModuleRegister\Interfaces\ModuleRegisterInterface;
+use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinitionInterface;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Yaml;
 
@@ -38,7 +38,7 @@ class ModuleRegister implements ModuleRegisterInterface
     {
         // Default location
         if (null === $fileLocation) {
-            $fileLocation = __DIR__.'/../register/register.yaml';
+            $fileLocation = __DIR__ . '/../register/register.yaml';
         }
         $this->fileLocation = $fileLocation;
     }
@@ -46,9 +46,22 @@ class ModuleRegister implements ModuleRegisterInterface
     /**
      * @return WorkerModuleDefinitionInterface[]
      */
-    public function getWorkerModuleDefinitions()
+    public function getWorkerModules()
     {
         return $this->workerModules;
+    }
+
+    /**
+     * Get a named module
+     * @param $name
+     * @return WorkerModuleDefinitionInterface
+     */
+    public function getWorkerModule($name)
+    {
+        if (array_key_exists($name, $this->workerModules)) {
+            return $this->workerModules[$name];
+        }
+        throw new \RuntimeException("Could not find module named '{$name}'");
     }
 
     /**
@@ -59,19 +72,7 @@ class ModuleRegister implements ModuleRegisterInterface
     public function addWorkerModule(WorkerModuleDefinitionInterface $module)
     {
         $this->workerModules[$module->getName()] = $module;
-    }
-
-    /**
-     * Get a named module
-     * @param $name
-     * @return WorkerModuleDefinitionInterface
-     */
-    public function getWorkerModule($name)
-    {
-        if(array_key_exists($name, $this->workerModules)) {
-            return $this->workerModules[$name];
-        }
-        throw new \RuntimeException("Could not find module named '{$name}'");
+        return $this;
     }
 
     /**
@@ -84,6 +85,7 @@ class ModuleRegister implements ModuleRegisterInterface
         foreach ($modules as $module) {
             $this->addWorkerModule($module);
         }
+        return $this;
     }
 
     /**
@@ -140,6 +142,7 @@ class ModuleRegister implements ModuleRegisterInterface
 
     /**
      * @param array $array
+     * @return $this
      */
     protected function fromArray(array $array)
     {
@@ -154,5 +157,6 @@ class ModuleRegister implements ModuleRegisterInterface
                 );
             }
         }
+        return $this;
     }
 }
