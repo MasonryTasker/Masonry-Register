@@ -9,7 +9,7 @@
 
 namespace Foundry\Masonry\ModuleRegister\WorkerModuleDefinition;
 
-use Foundry\Masonry\ModuleRegister\WorkerModuleDefinition;
+use Foundry\Masonry\ModuleRegister\WorkerModuleDefinitionInterface;
 use Symfony\Component\Yaml\Yaml as YamlReader;
 
 /**
@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml as YamlReader;
  * @package Masonry-Register
  * @see     https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
-class YamlWorkerModuleDefinition extends WorkerModuleDefinition
+class YamlWorkerModuleDefinition extends WorkerModuleDefinitionInterface
 {
 
     /**
