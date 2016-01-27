@@ -38,7 +38,7 @@ class ModuleRegister implements ModuleRegisterInterface
     {
         // Default location
         if (null === $fileLocation) {
-            $fileLocation = __DIR__.'/../register/register.yaml';
+            $fileLocation = __DIR__ . '/../register/register.yaml';
         }
         $this->fileLocation = $fileLocation;
     }
@@ -46,9 +46,22 @@ class ModuleRegister implements ModuleRegisterInterface
     /**
      * @return WorkerModuleDefinitionInterface[]
      */
-    public function getWorkerModuleDefinitions()
+    public function getWorkerModules()
     {
         return $this->workerModules;
+    }
+
+    /**
+     * Get a named module
+     * @param $name
+     * @return WorkerModuleDefinitionInterface
+     */
+    public function getWorkerModule($name)
+    {
+        if (array_key_exists($name, $this->workerModules)) {
+            return $this->workerModules[$name];
+        }
+        throw new \RuntimeException("Could not find module named '{$name}'");
     }
 
     /**
@@ -59,19 +72,6 @@ class ModuleRegister implements ModuleRegisterInterface
     public function addWorkerModule(WorkerModuleDefinitionInterface $module)
     {
         $this->workerModules[$module->getName()] = $module;
-    }
-
-    /**
-     * Get a named module
-     * @param $name
-     * @return WorkerModuleDefinitionInterface
-     */
-    public function getWorkerModule($name)
-    {
-        if(array_key_exists($name, $this->workerModules)) {
-            return $this->workerModules[$name];
-        }
-        throw new \RuntimeException("Could not find module named '{$name}'");
     }
 
     /**

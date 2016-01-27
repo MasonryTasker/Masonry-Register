@@ -20,7 +20,14 @@ interface ModuleRegister
     /**
      * @return WorkerModuleDefinition[]
      */
-    public function getWorkerModuleDefinitions();
+    public function getWorkerModules();
+
+    /**
+     * Get a named module
+     * @param $name
+     * @return WorkerModuleDefinition
+     */
+    public function getWorkerModule($name);
 
     /**
      * @param WorkerModuleDefinition $module The definition of the module to be added
