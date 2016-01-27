@@ -15,26 +15,26 @@ namespace Foundry\Masonry\ModuleRegister\Interfaces;
  * @package Masonry-Register
  * @see     https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
-interface ModuleRegister
+interface ModuleRegisterInterface
 {
     /**
-     * @return WorkerModuleDefinition[]
+     * @return WorkerModuleDefinitionInterface[]
      */
     public function getWorkerModules();
 
     /**
      * Get a named module
      * @param $name
-     * @return WorkerModuleDefinition
+     * @return WorkerModuleDefinitionInterface
      */
     public function getWorkerModule($name);
 
     /**
-     * @param WorkerModuleDefinition $module The definition of the module to be added
+     * @param WorkerModuleDefinitionInterface $module The definition of the module to be added
      * @throws \Exception If a problem occurs.
      * @return $this
      */
-    public function addWorkerModule(WorkerModuleDefinition $module);
+    public function addWorkerModule(WorkerModuleDefinitionInterface $module);
 
     /**
      * This will always save to the file from which is was loaded

@@ -9,8 +9,8 @@
 
 namespace Foundry\Masonry\ModuleRegister;
 
-use Foundry\Masonry\ModuleRegister\Interfaces\ModuleRegister as ModuleRegisterInterface;
-use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinition as WorkerModuleDefinitionInterface;
+use Foundry\Masonry\ModuleRegister\Interfaces\ModuleRegisterInterface;
+use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinitionInterface;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Yaml;
 

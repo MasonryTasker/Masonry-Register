@@ -11,7 +11,7 @@ namespace Foundry\Masonry\ModuleRegister;
 
 use Foundry\Masonry\Interfaces\Task\DescriptionInterface;
 use Foundry\Masonry\Interfaces\WorkerInterface;
-use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinition as WorkerModuleDefinitionInterface;
+use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinitionInterface;
 
 /**
  * Class WorkerModuleDefinition
@@ -22,11 +22,6 @@ use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinition as WorkerMo
 class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
 {
 
-    const KEY_NAME = 'name';
-    const KEY_WORKERS = 'workers';
-    const KEY_DESCRIPTIONS = 'descriptions';
-    const KEY_EXTRA = 'extra';
-
     protected static $moduleKeys = [
         self::KEY_WORKERS,
         self::KEY_DESCRIPTIONS,
@@ -34,7 +29,7 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     ];
 
     /**
-     * @var $name
+     * @var string
      */
     protected $name;
 
@@ -69,7 +64,7 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getName()
     {

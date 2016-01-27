@@ -17,8 +17,12 @@ use Foundry\Masonry\Interfaces\WorkerModuleInterface;
  * @package Masonry-Register
  * @see     https://github.com/TheFoundryVisionmongers/Masonry-Register
  */
-interface WorkerModuleDefinition
+interface WorkerModuleDefinitionInterface
 {
+    const KEY_NAME = 'name';
+    const KEY_WORKERS = 'workers';
+    const KEY_DESCRIPTIONS = 'descriptions';
+    const KEY_EXTRA = 'extra';
 
     public function getName();
 
