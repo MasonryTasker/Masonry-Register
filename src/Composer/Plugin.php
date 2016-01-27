@@ -34,16 +34,16 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * @var IOInterface
      */
-    protected $io;
+    protected $inputOutput;
 
     /**
      * @param Composer $composer
-     * @param IOInterface $io
+     * @param IOInterface $inputOutput
      */
-    public function activate(Composer $composer, IOInterface $io)
+    public function activate(Composer $composer, IOInterface $inputOutput)
     {
         $this->composer = $composer;
-        $this->io = $io;
+        $this->inputOutput = $inputOutput;
     }
 
     /**
@@ -114,10 +114,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         foreach (glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
             try {
                 $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
-                $this->io->write("<info>Added module:</info> $masonryConfig");
+                $this->inputOutput->write("<info>Added module:</info> $masonryConfig");
             } catch (\Exception $e) {
-                $this->io->writeError("<error>Invalid module:</error> $masonryConfig");
-                $this->io->writeError("== {$e->getMessage()}");
+                $this->inputOutput->writeError("<error>Invalid module:</error> $masonryConfig");
+                $this->inputOutput->writeError("== {$e->getMessage()}");
             }
         }
         $register = new ModuleRegister($fileLocation);

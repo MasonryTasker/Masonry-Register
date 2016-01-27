@@ -44,7 +44,7 @@ class PluginTest extends TestCase
         );
         $this->assertSame(
             $ioInterface,
-            $this->getObjectAttribute($plugin, 'io')
+            $this->getObjectAttribute($plugin, 'inputOutput')
         );
     }
 
