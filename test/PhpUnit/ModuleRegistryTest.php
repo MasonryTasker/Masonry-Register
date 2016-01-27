@@ -9,7 +9,7 @@
 
 namespace Foundry\Masonry\ModuleRegister\Test\PhpUnit;
 
-use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinition;
+use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinitionInterface;
 use Foundry\Masonry\ModuleRegister\ModuleRegister;
 
 /**
@@ -43,14 +43,14 @@ class ModuleRegistryTest extends TestCase
 
     /**
      * @test
-     * @covers ::getWorkerModuleDefinitions
+     * @covers ::getWorkerModules
      * @covers ::addWorkerModule
      */
-    public function testGetWorkerModuleDefinitions()
+    public function testGetWorkerModules()
     {
         $moduleName = 'module';
-        /** @var WorkerModuleDefinition|\PHPUnit_Framework_MockObject_MockObject $module */
-        $module = $this->getMockForAbstractClass(WorkerModuleDefinition::class);
+        /** @var WorkerModuleDefinitionInterface|\PHPUnit_Framework_MockObject_MockObject $module */
+        $module = $this->getMockForAbstractClass(WorkerModuleDefinitionInterface::class);
         $module
             ->expects($this->once())
             ->method('getName')
@@ -59,7 +59,7 @@ class ModuleRegistryTest extends TestCase
 
         $register = new ModuleRegister();
         $this->assertEmpty(
-            $register->getWorkerModuleDefinitions()
+            $register->getWorkerModules()
         );
 
         $this->assertSame(
@@ -69,12 +69,12 @@ class ModuleRegistryTest extends TestCase
 
         $this->assertArrayHasKey(
             $moduleName,
-            $register->getWorkerModuleDefinitions()
+            $register->getWorkerModules()
         );
 
         $this->assertContains(
             $module,
-            $register->getWorkerModuleDefinitions()
+            $register->getWorkerModules()
         );
     }
 
@@ -86,8 +86,8 @@ class ModuleRegistryTest extends TestCase
     public function testGetWorkerModule()
     {
         $moduleName = 'module';
-        /** @var WorkerModuleDefinition|\PHPUnit_Framework_MockObject_MockObject $module */
-        $module = $this->getMockForAbstractClass(WorkerModuleDefinition::class);
+        /** @var WorkerModuleDefinitionInterface|\PHPUnit_Framework_MockObject_MockObject $module */
+        $module = $this->getMockForAbstractClass(WorkerModuleDefinitionInterface::class);
         $module
             ->expects($this->once())
             ->method('getName')
@@ -125,15 +125,15 @@ class ModuleRegistryTest extends TestCase
     {
         $module1Name = 'module1';
         $module2Name = 'module2';
-        /** @var WorkerModuleDefinition|\PHPUnit_Framework_MockObject_MockObject $module1 */
-        $module1 = $this->getMockForAbstractClass(WorkerModuleDefinition::class);
+        /** @var WorkerModuleDefinitionInterface|\PHPUnit_Framework_MockObject_MockObject $module1 */
+        $module1 = $this->getMockForAbstractClass(WorkerModuleDefinitionInterface::class);
         $module1
             ->expects($this->once())
             ->method('getName')
             ->with()
             ->will($this->returnValue($module1Name));
-        /** @var WorkerModuleDefinition|\PHPUnit_Framework_MockObject_MockObject $module2 */
-        $module2 = $this->getMockForAbstractClass(WorkerModuleDefinition::class);
+        /** @var WorkerModuleDefinitionInterface|\PHPUnit_Framework_MockObject_MockObject $module2 */
+        $module2 = $this->getMockForAbstractClass(WorkerModuleDefinitionInterface::class);
         $module1
             ->expects($this->once())
             ->method('getName')
@@ -166,7 +166,7 @@ class ModuleRegistryTest extends TestCase
         );
 
         $this->assertContainsOnlyInstancesOf(
-            WorkerModuleDefinition::class,
+            WorkerModuleDefinitionInterface::class,
             $this->getObjectAttribute($register, 'workerModules')
         );
     }

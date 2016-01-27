@@ -72,6 +72,7 @@ class ModuleRegister implements ModuleRegisterInterface
     public function addWorkerModule(WorkerModuleDefinitionInterface $module)
     {
         $this->workerModules[$module->getName()] = $module;
+        return $this;
     }
 
     /**
