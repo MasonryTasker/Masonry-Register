@@ -24,11 +24,30 @@ interface WorkerModuleDefinitionInterface
     const KEY_DESCRIPTIONS = 'descriptions';
     const KEY_EXTRA = 'extra';
 
+    /**
+     * @return string
+     */
     public function getName();
 
+    /**
+     * @return string[]
+     */
     public function getWorkers();
 
+    /**
+     * @return string[]
+     */
     public function getDescriptions();
 
+    /**
+     * Get the name of a description class based on a name or alias
+     * @param $nameOrAlias
+     * @return string
+     */
+    public function lookupDescription($nameOrAlias);
+
+    /**
+     * @return string[]
+     */
     public function getExtra();
 }
