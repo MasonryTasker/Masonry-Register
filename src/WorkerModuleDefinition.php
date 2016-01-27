@@ -222,14 +222,14 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     public function lookupDescription($nameOrAlias)
     {
         // It might already be the right class
-        if(array_key_exists($nameOrAlias, $this->descriptions)) {
+        if (array_key_exists($nameOrAlias, $this->descriptions)) {
             return $nameOrAlias;
         }
 
         // If it isn't, we should look it up.
-        foreach($this->descriptions as $description => $aliases) {
-            if(is_array($aliases)) {
-                foreach($aliases as $alias) {
+        foreach ($this->descriptions as $description => $aliases) {
+            if (is_array($aliases)) {
+                foreach ($aliases as $alias) {
                     if ($nameOrAlias === $alias) {
                         return $description;
                     }
