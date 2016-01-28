@@ -146,7 +146,8 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     protected function fromArray(array $array)
     {
-        if (array_key_exists('workerModules', $array)
+        if (
+            array_key_exists('workerModules', $array)
             && is_array($array['workerModules'])
         ) {
             foreach ($array['workerModules'] as $name => $module) {
