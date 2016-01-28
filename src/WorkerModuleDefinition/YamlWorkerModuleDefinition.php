@@ -33,7 +33,6 @@ class YamlWorkerModuleDefinition extends WorkerModuleDefinition
         }
         try {
             $data = (array)YamlReader::parse(file_get_contents($file));
-            $data = static::flattenKeys($data);
             return static::fromArray($data);
         } catch (\Exception $exception) {
             throw new \RuntimeException(
@@ -42,19 +41,5 @@ class YamlWorkerModuleDefinition extends WorkerModuleDefinition
                 $exception
             );
         }
-    }
-
-    /**
-     * Flattens any keys in the array
-     * @param array $oldArray
-     * @return array
-     */
-    protected static function flattenKeys(array $oldArray)
-    {
-        $newArray = [];
-        foreach ($oldArray as $key => $value) {
-            $newArray[strtolower($key)] = $value;
-        }
-        return $newArray;
     }
 }
