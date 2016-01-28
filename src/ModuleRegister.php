@@ -130,6 +130,7 @@ class ModuleRegister implements ModuleRegisterInterface
         $workerModules = [];
         foreach ($this->workerModules as $module) {
             $workerModules[$module->getName()] = [
+                WorkerModuleDefinition::KEY_NAME => $module->getName(),
                 WorkerModuleDefinition::KEY_WORKERS => $module->getWorkers(),
                 WorkerModuleDefinition::KEY_DESCRIPTIONS => $module->getDescriptions(),
                 WorkerModuleDefinition::KEY_EXTRA => $module->getExtra(),
