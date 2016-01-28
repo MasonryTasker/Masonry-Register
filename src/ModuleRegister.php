@@ -146,15 +146,19 @@ class ModuleRegister implements ModuleRegisterInterface
      */
     protected function fromArray(array $array)
     {
-        if (array_key_exists('workerModules', $array)
+        if (
+            array_key_exists('workerModules', $array)
             && is_array($array['workerModules'])
         ) {
             foreach ($array['workerModules'] as $name => $module) {
-                $this->workerModules[$name] = new WorkerModuleDefinition(
-                    (array)$module[WorkerModuleDefinition::KEY_WORKERS],
-                    (array)$module[WorkerModuleDefinition::KEY_DESCRIPTIONS],
-                    (array)$module[WorkerModuleDefinition::KEY_EXTRA]
-                );
+                $name         = $module[WorkerModuleDefinition::KEY_NAME];
+                $workers      = (array)$module[WorkerModuleDefinition::KEY_WORKERS];
+                $descriptions = (array)$module[WorkerModuleDefinition::KEY_DESCRIPTIONS];
+                $extra        = array_key_exists(WorkerModuleDefinition::KEY_EXTRA, $module)
+                    ? (array)$module[WorkerModuleDefinition::KEY_EXTRA]
+                    : [];
+                
+                $this->workerModules[$name] = new WorkerModuleDefinition($name, $workers, $descriptions, $extra);
             }
         }
         return $this;
