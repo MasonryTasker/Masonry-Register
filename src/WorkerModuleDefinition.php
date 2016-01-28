@@ -258,7 +258,7 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     {
         $flatArray = [];
         foreach($data as $key => $value) {
-            $flatArray[$key] = $value;
+            $flatArray[strtolower($key)] = $value;
         }
         return $flatArray;
     }
