@@ -257,7 +257,7 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     protected static function flattenKeys(array $data)
     {
         $flatArray = [];
-        foreach($data as $key => $value) {
+        foreach ($data as $key => $value) {
             $flatArray[strtolower($key)] = $value;
         }
         return $flatArray;
