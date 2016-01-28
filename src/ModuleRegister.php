@@ -151,14 +151,7 @@ class ModuleRegister implements ModuleRegisterInterface
             && is_array($array['workerModules'])
         ) {
             foreach ($array['workerModules'] as $name => $module) {
-                $name         = $module[WorkerModuleDefinition::KEY_NAME];
-                $workers      = (array)$module[WorkerModuleDefinition::KEY_WORKERS];
-                $descriptions = (array)$module[WorkerModuleDefinition::KEY_DESCRIPTIONS];
-                $extra        = array_key_exists(WorkerModuleDefinition::KEY_EXTRA, $module)
-                    ? (array)$module[WorkerModuleDefinition::KEY_EXTRA]
-                    : [];
-                
-                $this->workerModules[$name] = new WorkerModuleDefinition($name, $workers, $descriptions, $extra);
+                $this->workerModules[$name] = WorkerModuleDefinition::fromArray($module);
             }
         }
         return $this;

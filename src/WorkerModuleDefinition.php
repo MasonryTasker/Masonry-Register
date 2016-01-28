@@ -85,10 +85,12 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
             throw new \RuntimeException('Unknown error happened while validating module array data');
         }
 
-        $name = $definition[static::KEY_NAME];
-        $workers = (array)$definition[static::KEY_WORKERS];
-        $description = (array)$definition[static::KEY_DESCRIPTIONS];
-        $extra = array_key_exists(static::KEY_EXTRA, $definition) ? (array)$definition[static::KEY_EXTRA] : [];
+        $flatDefinition = static::flattenKeys($definition);
+
+        $name = $flatDefinition[static::KEY_NAME];
+        $workers = (array)$flatDefinition[static::KEY_WORKERS];
+        $description = (array)$flatDefinition[static::KEY_DESCRIPTIONS];
+        $extra = array_key_exists(static::KEY_EXTRA, $flatDefinition) ? (array)$flatDefinition[static::KEY_EXTRA] : [];
 
         return new static($name, $workers, $description, $extra);
     }
@@ -247,5 +249,18 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     public function getExtra()
     {
         return $this->extra;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected static function flattenKeys(array $data)
+    {
+        $flatArray = [];
+        foreach($data as $key => $value) {
+            $flatArray[$key] = $value;
+        }
+        return $flatArray;
     }
 }
