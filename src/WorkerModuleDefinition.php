@@ -81,12 +81,11 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
      */
     public static function fromArray(array $definition)
     {
-        if (!static::validateArray($definition)) {
-            throw new \RuntimeException('Unknown error happened while validating module array data');
-        }
-
         $flatDefinition = static::flattenKeys($definition);
 
+        if (!static::validateArray($flatDefinition)) {
+            throw new \RuntimeException('Unknown error happened while validating module array data');
+        }
         $name = $flatDefinition[static::KEY_NAME];
         $workers = (array)$flatDefinition[static::KEY_WORKERS];
         $description = (array)$flatDefinition[static::KEY_DESCRIPTIONS];
