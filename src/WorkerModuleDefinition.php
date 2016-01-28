@@ -167,7 +167,7 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
      */
     protected function getDescriptionErrors(array $definition)
     {
-        $descriptionInterfaceName = DescriptionInterface::class;
+        $interfaceName = DescriptionInterface::class;
         $key = static::KEY_DESCRIPTIONS;
 
         // Check there are even descriptions
@@ -176,15 +176,15 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
         }
 
         // Check all descriptions are included
-        $incompatibleDescriptions = [];
+        $invalidDescriptions = [];
         foreach ($definition[$key] as $potentialDescription => $aliases) {
             $reflectedDescription = new \ReflectionClass($potentialDescription);
-            if (!$reflectedDescription->isSubclassOf($descriptionInterfaceName)) {
-                $incompatibleDescriptions[$potentialDescription] = $aliases;
+            if (!$reflectedDescription->isSubclassOf($interfaceName)) {
+                $invalidDescriptions[$potentialDescription] = $aliases;
             }
         }
-        if ($incompatibleDescriptions) {
-            return 'Incompatible descriptions: ' . implode(', ', $incompatibleDescriptions);
+        if ($invalidDescriptions) {
+            return 'Invalid descriptions: ' . implode(', ', $invalidDescriptions);
         }
         return false;
     }
