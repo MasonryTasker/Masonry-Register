@@ -25,6 +25,7 @@ class YamlWorkerModuleDefinition extends WorkerModuleDefinition
      * Load a module definition
      * @param $file
      * @return static
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function load($file)
     {

@@ -83,6 +83,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * Run with composer validate-masonry
      * @param Event $event
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function validate(Event $event)
     {
@@ -106,6 +108,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
     /**
      * @param string|null $fileLocation
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function buildRegister($fileLocation = null)
     {
