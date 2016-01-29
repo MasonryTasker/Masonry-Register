@@ -44,7 +44,7 @@
   },
   "scripts": {
     "quality": [
-      "vendor/bin/phpcpd src",
+      "vendor/bin/phpcpd src -q",
       "vendor/bin/phpcs --standard=phpcs.xml src",
       "vendor/bin/phpmd src text phpmd.xml"
     ],
