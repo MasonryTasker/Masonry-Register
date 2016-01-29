@@ -115,7 +115,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     {
         $vendorDir = $this->composer->getConfig()->get('vendor-dir');
         $modules = [];
-        foreach (glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
+        foreach (glob("{$vendorDir}/{*/**,\\.\\.}/masonry.y{a,}ml", GLOB_BRACE) as $masonryConfig) {
             try {
                 $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
                 $this->inputOutput->write("<info>Added module:</info> $masonryConfig");
