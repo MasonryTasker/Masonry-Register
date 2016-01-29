@@ -47,17 +47,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * Test the plugin by running `composer test`
-     * @param Event $event
-     */
-    public static function test(Event $event)
-    {
-        $plugin = new static();
-        $plugin->activate($event->getComposer(), $event->getIO());
-        $plugin->onPostAutoloadDump($event);
-    }
-
-    /**
      * Build the register once the autoloader has been dumped
      * @param Event $event
      */
