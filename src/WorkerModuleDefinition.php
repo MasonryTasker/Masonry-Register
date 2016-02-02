@@ -75,6 +75,30 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     }
 
     /**
+     * @return string[]
+     */
+    public function getWorkers()
+    {
+        return $this->workers;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDescriptions()
+    {
+        return $this->descriptions;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getExtra()
+    {
+        return $this->extra;
+    }
+
+    /**
      * Create a new module definition from an array of data
      * @param array $definition
      * @return static
@@ -211,22 +235,6 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     }
 
     /**
-     * @return string[]
-     */
-    public function getWorkers()
-    {
-        return $this->workers;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getDescriptions()
-    {
-        return $this->descriptions;
-    }
-
-    /**
      * Get the name of a description class based on a name or alias
      * @param $nameOrAlias
      * @return string
@@ -251,14 +259,6 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
 
         // If we haven't found it by now, we're not going to.
         throw new \RuntimeException("No description could be found matching {$this->getName()}/{$nameOrAlias}");
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getExtra()
-    {
-        return $this->extra;
     }
 
     /**
