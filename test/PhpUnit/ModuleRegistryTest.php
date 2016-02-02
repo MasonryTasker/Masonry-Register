@@ -11,6 +11,7 @@ namespace Foundry\Masonry\ModuleRegister\Test\PhpUnit;
 
 use Foundry\Masonry\ModuleRegister\Interfaces\WorkerModuleDefinitionInterface;
 use Foundry\Masonry\ModuleRegister\ModuleRegister;
+use org\bovigo\vfs\vfsStream;
 
 /**
  * Class ModuleRegistryTest
@@ -168,6 +169,186 @@ class ModuleRegistryTest extends TestCase
         $this->assertContainsOnlyInstancesOf(
             WorkerModuleDefinitionInterface::class,
             $this->getObjectAttribute($register, 'workerModules')
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::save
+     * @uses \Foundry\Masonry\ModuleRegister\ModuleRegister::toArray
+     */
+    public function testSave()
+    {
+        $registerFile = 'register.yaml';
+        $vfs = vfsStream::setup('root');
+
+        $register = new ModuleRegister($vfs->url() . '/' . $registerFile);
+
+        $this->assertFalse(
+            $vfs->hasChild($registerFile)
+        );
+
+        $register->save();
+
+        $this->assertTrue(
+            $vfs->hasChild($registerFile)
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::load
+     * @uses \Foundry\Masonry\ModuleRegister\ModuleRegister::fromArray
+     */
+    public function testLoadFileExists()
+    {
+        $registerFile = 'register.yaml';
+        $vfs = vfsStream::setup('root', null, [
+            $registerFile => ''
+        ]);
+
+        $this->assertTrue(
+            $vfs->hasChild($registerFile)
+        );
+
+        $register = ModuleRegister::load($vfs->url() . '/' . $registerFile);
+
+        $this->assertSame(
+            $vfs->url() . '/' . $registerFile,
+            $this->getObjectAttribute($register, 'fileLocation')
+        );
+
+        $this->assertEmpty(
+            $this->getObjectAttribute($register, 'workerModules')
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::load
+     * @uses \Foundry\Masonry\ModuleRegister\ModuleRegister::fromArray
+     */
+    public function testLoadFileNotExists()
+    {
+        $registerFile = 'register.yaml';
+        $vfs = vfsStream::setup('root');
+
+        $this->assertFalse(
+            $vfs->hasChild($registerFile)
+        );
+
+        $register = ModuleRegister::load($vfs->url() . '/' . $registerFile);
+
+        $this->assertTrue(
+            $vfs->hasChild($registerFile)
+        );
+
+        $this->assertSame(
+            $vfs->url() . '/' . $registerFile,
+            $this->getObjectAttribute($register, 'fileLocation')
+        );
+
+        $this->assertEmpty(
+            $this->getObjectAttribute($register, 'workerModules')
+        );
+    }
+
+    /**
+     * @test
+     * @covers ::toArray
+     */
+    public function testToArray()
+    {
+        $module1 = $this->getMockForAbstractClass(WorkerModuleDefinitionInterface::class);
+        $module2 = $this->getMockForAbstractClass(WorkerModuleDefinitionInterface::class);
+
+        $module1
+            ->expects($this->exactly(3))
+            ->method('getName')
+            ->with()
+            ->will($this->returnValue('Module1'));
+        $module1
+            ->expects($this->once())
+            ->method('getWorkers')
+            ->with()
+            ->will($this->returnValue([]));
+        $module1
+            ->expects($this->once())
+            ->method('getDescriptions')
+            ->with()
+            ->will($this->returnValue([]));
+        $module1
+            ->expects($this->once())
+            ->method('getExtra')
+            ->with()
+            ->will($this->returnValue([]));
+
+        $module2
+            ->expects($this->exactly(3))
+            ->method('getName')
+            ->with()
+            ->will($this->returnValue('Module2'));
+        $module2
+            ->expects($this->once())
+            ->method('getWorkers')
+            ->with()
+            ->will($this->returnValue([
+                'Worker1',
+                'Worker2',
+            ]));
+        $module2
+            ->expects($this->once())
+            ->method('getDescriptions')
+            ->with()
+            ->will($this->returnValue([
+                'Description1',
+                'Description2',
+            ]));
+        $module2
+            ->expects($this->once())
+            ->method('getExtra')
+            ->with()
+            ->will($this->returnValue([
+                'something' => 'extra',
+            ]));
+
+
+        $register = new ModuleRegister();
+
+        $register->addWorkerModules([
+            $module1,
+            $module2,
+        ]);
+
+        $expected = [
+            'workerModules' => [
+                'Module1' => [
+                    'name' => 'Module1',
+                    'workers' => [],
+                    'descriptions' => [],
+                    'extra' => [],
+                ],
+                'Module2' => [
+                    'name' => 'Module2',
+                    'workers' => [
+                        'Worker1',
+                        'Worker2',
+                    ],
+                    'descriptions' => [
+                        'Description1',
+                        'Description2',
+                    ],
+                    'extra' => [
+                        'something' => 'extra'
+                    ],
+                ],
+            ],
+        ];
+
+        $toArray = $this->getObjectMethod($register, 'toArray');
+        $this->assertSame(
+            $expected,
+            $toArray()
         );
     }
 }
