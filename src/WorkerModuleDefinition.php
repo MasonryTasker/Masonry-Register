@@ -75,24 +75,53 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     }
 
     /**
+     * @return string[]
+     */
+    public function getWorkers()
+    {
+        return $this->workers;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getDescriptions()
+    {
+        return $this->descriptions;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getExtra()
+    {
+        return $this->extra;
+    }
+
+    /**
      * Create a new module definition from an array of data
      * @param array $definition
      * @return static
      */
     public static function fromArray(array $definition)
     {
-        if (!static::validateArray($definition)) {
+        $reflection = new \ReflectionClass(static::class);
+        /** @var static $self */
+        $self = $reflection->newInstanceWithoutConstructor();
+
+        $flatDefinition = $self->flattenKeys($definition);
+
+        if (!$self->validateArray($flatDefinition)) {
             throw new \RuntimeException('Unknown error happened while validating module array data');
         }
+        $self->name = $flatDefinition[static::KEY_NAME];
+        $self->workers = (array)$flatDefinition[static::KEY_WORKERS];
+        $self->descriptions = (array)$flatDefinition[static::KEY_DESCRIPTIONS];
+        $self->extra = array_key_exists(static::KEY_EXTRA, $flatDefinition)
+            ? (array)$flatDefinition[static::KEY_EXTRA]
+            : [];
 
-        $flatDefinition = static::flattenKeys($definition);
-
-        $name = $flatDefinition[static::KEY_NAME];
-        $workers = (array)$flatDefinition[static::KEY_WORKERS];
-        $description = (array)$flatDefinition[static::KEY_DESCRIPTIONS];
-        $extra = array_key_exists(static::KEY_EXTRA, $flatDefinition) ? (array)$flatDefinition[static::KEY_EXTRA] : [];
-
-        return new static($name, $workers, $description, $extra);
+        return $self;
     }
 
     /**
@@ -101,86 +130,12 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
      * @throws \RuntimeException
      * @return true
      */
-    public static function validateArray(array $definition)
+    public function validateArray(array $definition)
     {
-        /**
-         * Get any errors regarding workers from the definition
-         * @param array $definition
-         * @return bool|string
-         */
-        $getWorkerErrors = function (array $definition) {
-            $workerInterfaceName = WorkerInterface::class;
-            $key = static::KEY_WORKERS;
-
-            // Check there are even workers
-            if (!array_key_exists($key, $definition)) {
-                return $key . ' key is missing';
-            }
-
-            // Check all workers are included
-            $incompatibleWorkers = [];
-            foreach ($definition[$key] as $potentialWorker => $aliases) {
-                $reflectedWorker = new \ReflectionClass($potentialWorker);
-                if (!$reflectedWorker->isSubclassOf($workerInterfaceName)) {
-                    $incompatibleWorkers[$potentialWorker] = $aliases;
-                }
-            }
-            if ($incompatibleWorkers) {
-                return 'Incompatible workers: ' . implode(', ', $incompatibleWorkers);
-            }
-            return false;
-        };
-        /**
-         * Get any errors regarding descriptions from the definition
-         * @param array $definition
-         * @return bool|string
-         */
-        $getDescriptionErrors = function (array $definition) {
-            $descriptionInterfaceName = DescriptionInterface::class;
-            $key = static::KEY_DESCRIPTIONS;
-
-            // Check there are even descriptions
-            if (!array_key_exists($key, $definition)) {
-                return $key . ' key is missing';
-            }
-
-            // Check all descriptions are included
-            $incompatibleDescriptions = [];
-            foreach ($definition[$key] as $potentialDescription => $aliases) {
-                $reflectedDescription = new \ReflectionClass($potentialDescription);
-                if (!$reflectedDescription->isSubclassOf($descriptionInterfaceName)) {
-                    $incompatibleDescriptions[$potentialDescription] = $aliases;
-                }
-            }
-            if ($incompatibleDescriptions) {
-                return 'Incompatible descriptions: ' . implode(', ', $incompatibleDescriptions);
-            }
-            return false;
-        };
-        /**
-         * Get any errors regarding config variables from the definition
-         * @param array $definition
-         * @return bool|string
-         */
-        $getNameErrors = function (array $definition) {
-            $key = static::KEY_NAME;
-
-            // Check there are even configs
-            if (!array_key_exists($key, $definition)) {
-                return $key . ' key is missing';
-            }
-
-            if (!is_string($definition[$key])) {
-                return $key . ' must be a string';
-            }
-
-            return false;
-        };
-
         $errors = [];
-        $workerErrors = $getWorkerErrors($definition);
-        $descriptionErrors = $getDescriptionErrors($definition);
-        $nameErrors = $getNameErrors($definition);
+        $workerErrors = $this->getWorkerErrors($definition);
+        $descriptionErrors = $this->getDescriptionErrors($definition);
+        $nameErrors = $this->getNameErrors($definition);
         if ($workerErrors) {
             $errors[] = $workerErrors;
         }
@@ -201,19 +156,82 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     }
 
     /**
-     * @return string[]
+     * Get any errors regarding workers from the definition
+     * @param array $definition
+     * @return bool|string
      */
-    public function getWorkers()
+    protected function getWorkerErrors(array $definition)
     {
-        return $this->workers;
+        $workerInterfaceName = WorkerInterface::class;
+        $key = static::KEY_WORKERS;
+
+        // Check there are even workers
+        if (!array_key_exists($key, $definition)) {
+            return $key . ' key is missing';
+        }
+
+        // Check all workers are included
+        $incompatibleWorkers = [];
+        foreach ($definition[$key] as $potentialWorker => $aliases) {
+            $reflectedWorker = new \ReflectionClass($potentialWorker);
+            if (!$reflectedWorker->isSubclassOf($workerInterfaceName)) {
+                $incompatibleWorkers[$potentialWorker] = $aliases;
+            }
+        }
+        if ($incompatibleWorkers) {
+            return 'Incompatible workers: ' . implode(', ', $incompatibleWorkers);
+        }
+        return false;
     }
 
     /**
-     * @return string[]
+     * Get any errors regarding descriptions from the definition
+     * @param array $definition
+     * @return bool|string
      */
-    public function getDescriptions()
+    protected function getDescriptionErrors(array $definition)
     {
-        return $this->descriptions;
+        $interfaceName = DescriptionInterface::class;
+        $key = static::KEY_DESCRIPTIONS;
+
+        // Check there are even descriptions
+        if (!array_key_exists($key, $definition)) {
+            return $key . ' key is missing';
+        }
+
+        // Check all descriptions are included
+        $invalidDescriptions = [];
+        foreach ($definition[$key] as $potentialDescription => $aliases) {
+            $reflectedDescription = new \ReflectionClass($potentialDescription);
+            if (!$reflectedDescription->isSubclassOf($interfaceName)) {
+                $invalidDescriptions[$potentialDescription] = $aliases;
+            }
+        }
+        if ($invalidDescriptions) {
+            return 'Invalid descriptions: ' . implode(', ', $invalidDescriptions);
+        }
+        return false;
+    }
+
+    /**
+     * Get any errors regarding config variables from the definition
+     * @param array $definition
+     * @return bool|string
+     */
+    protected function getNameErrors(array $definition)
+    {
+        $key = static::KEY_NAME;
+
+        // Check there are even configs
+        if (!array_key_exists($key, $definition)) {
+            return $key . ' key is missing';
+        }
+
+        if (!is_string($definition[$key])) {
+            return $key . ' must be a string';
+        }
+
+        return false;
     }
 
     /**
@@ -244,22 +262,14 @@ class WorkerModuleDefinition implements WorkerModuleDefinitionInterface
     }
 
     /**
-     * @return string[]
-     */
-    public function getExtra()
-    {
-        return $this->extra;
-    }
-
-    /**
      * @param array $data
      * @return array
      */
-    protected static function flattenKeys(array $data)
+    protected function flattenKeys(array $data)
     {
         $flatArray = [];
-        foreach($data as $key => $value) {
-            $flatArray[$key] = $value;
+        foreach ($data as $key => $value) {
+            $flatArray[strtolower($key)] = $value;
         }
         return $flatArray;
     }

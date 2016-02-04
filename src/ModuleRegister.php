@@ -104,6 +104,8 @@ class ModuleRegister implements ModuleRegisterInterface
      * @param string $fileLocation Which file to load from
      * @throws \Exception If the file can not be loaded.
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function load($fileLocation = null)
     {
@@ -130,6 +132,7 @@ class ModuleRegister implements ModuleRegisterInterface
         $workerModules = [];
         foreach ($this->workerModules as $module) {
             $workerModules[$module->getName()] = [
+                WorkerModuleDefinition::KEY_NAME => $module->getName(),
                 WorkerModuleDefinition::KEY_WORKERS => $module->getWorkers(),
                 WorkerModuleDefinition::KEY_DESCRIPTIONS => $module->getDescriptions(),
                 WorkerModuleDefinition::KEY_EXTRA => $module->getExtra(),
@@ -143,11 +146,11 @@ class ModuleRegister implements ModuleRegisterInterface
     /**
      * @param array $array
      * @return $this
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function fromArray(array $array)
     {
-        if (
-            array_key_exists('workerModules', $array)
+        if (array_key_exists('workerModules', $array)
             && is_array($array['workerModules'])
         ) {
             foreach ($array['workerModules'] as $name => $module) {

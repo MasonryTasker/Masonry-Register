@@ -13,7 +13,7 @@
   "require": {
     "composer-plugin-api": "^1.0",
     "symfony/yaml": "^2.0",
-    "foundry/masonry": "*@dev"
+    "foundry/masonry": "^1.0.0-alpha.1"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.8.21",
@@ -22,7 +22,8 @@
     "phploc/phploc": "^2.1",
     "pdepend/pdepend": "2.1",
     "sebastian/phpcpd": "^2.0",
-    "composer/composer": "^1.0.0@dev"
+    "composer/composer": "^1.0.0@dev",
+    "mikey179/vfsstream": "^1.6"
   },
   "autoload" : {
     "psr-4" : {
@@ -44,9 +45,10 @@
   },
   "scripts": {
     "quality": [
-      "vendor/bin/phpcpd src",
+      "vendor/bin/phpcpd src --min-tokens=5",
       "vendor/bin/phpcs --standard=phpcs.xml src",
-      "vendor/bin/phpmd src text phpmd.xml"
+      "vendor/bin/phpmd src text phpmd.xml",
+      "vendor/bin/phploc src"
     ],
     "quality-fix": [
       "vendor/bin/phpcbf --standard=phpcs.xml src"
