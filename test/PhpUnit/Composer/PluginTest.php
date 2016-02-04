@@ -10,6 +10,7 @@
 namespace Foundry\Masonry\ModuleRegister\Test\PhpUnit\Composer;
 
 use Composer\Composer;
+use Composer\Config;
 use Composer\IO\IOInterface;
 use Foundry\Masonry\ModuleRegister\Composer\Plugin;
 use Foundry\Masonry\ModuleRegister\Test\PhpUnit\TestCase;
@@ -48,6 +49,10 @@ class PluginTest extends TestCase
         );
     }
 
+    /**
+     * @test
+     * @covers ::getSubscribedEvents
+     */
     public function testGetSubscribedEvents()
     {
         $events = Plugin::getSubscribedEvents();
@@ -58,4 +63,35 @@ class PluginTest extends TestCase
         );
     }
 
+//    /**
+//     * @test
+//     * @covers ::requireAutoload
+//     */
+//    public function testRequireAutoload()
+//    {
+//        $testValue = 'test/value';
+//        $expected = 'test/value/autoload.php';
+//
+//        $config = $this->getMock(Config::class);
+//        $config
+//            ->expects($this->once())
+//            ->method('get')
+//            ->with('vendor-dir')
+//            ->will($this->returnValue($testValue));
+//
+//        $composer = $this->getMock(Composer::class);
+//        $composer
+//            ->expects($this->once())
+//            ->method('getConfig')
+//            ->with()
+//            ->will($this->returnValue($config));
+//
+//        $plugin = new Plugin();
+//        $requireAutoload = $this->getObjectMethod($plugin, 'requireAutoload');
+//
+//        $this->assertSame(
+//            $expected,
+//            $requireAutoload($composer)
+//        );
+//    }
 }

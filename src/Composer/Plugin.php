@@ -47,17 +47,6 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     /**
-     * Test the plugin by running `composer test`
-     * @param Event $event
-     */
-    public static function test(Event $event)
-    {
-        $plugin = new static();
-        $plugin->activate($event->getComposer(), $event->getIO());
-        $plugin->onPostAutoloadDump($event);
-    }
-
-    /**
      * Build the register once the autoloader has been dumped
      * @param Event $event
      */
@@ -83,6 +72,8 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * Run with composer validate-masonry
      * @param Event $event
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public static function validate(Event $event)
     {
@@ -106,12 +97,14 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 
     /**
      * @param string|null $fileLocation
+     *
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     protected function buildRegister($fileLocation = null)
     {
         $vendorDir = $this->composer->getConfig()->get('vendor-dir');
         $modules = [];
-        foreach (glob("$vendorDir/*/*/masonry.y*ml") as $masonryConfig) {
+        foreach (glob("{$vendorDir}/{*/**,\\.\\.}/masonry.y{a,}ml", GLOB_BRACE) as $masonryConfig) {
             try {
                 $modules[] = YamlWorkerModuleDefinition::load($masonryConfig);
                 $this->inputOutput->write("<info>Added module:</info> $masonryConfig");

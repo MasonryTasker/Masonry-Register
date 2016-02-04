@@ -1,0 +1,22 @@
+language: php
+php:
+- 5.5
+- 5.6
+- 7.0
+- hhvm
+- nightly
+matrix:
+  fast_finish: true
+  allow_failures:
+  - php: nightly
+  - php: hhvm
+before_script:
+- git log -n 1
+- composer self-update
+- composer install
+script:
+- composer test
+sudo: false
+notifications:
+  slack:
+    secure: dDQWLq2luyg5CbQ1GP1PEAtfeulU/Y715F5e0xDpOzOFhSAVLl5Qk4MoMfm2hjmpL4Ls9aDMbSJ/4UMsfK3pNVEiWgo9UOsyL/dkIdsfl3Uzk9mrZJMXUU8B+NSt+W2j1dRwuToOfQEbhHpsaUyR/c7gqVAJh/WkJ8y+aOCfdbczf3T9fkEM6oRtgqQnI/b93weFjdaYNV/Cf1ZNkK4uXr45VLM/OevbAr0UIB/kTXzanYgFJLe0xWvStXI1dTBh3MGP6EFwP0MEMcxJT2tHVw34yPMWNgox6Q0gc98ePtuKP6PYaU8tPo5VD8YGXwkR7TL/dGjzbdqa4jt2MU2wb6oePLLaEhfi3+hopgLU3/L/5CYYxWU2N6IlhZqILcMM0u6WgKGNio0cW0swmIdUT7x1tzu9hpS3Ujbakb7N0bV2OXLd9dbNapYNpqPmdGt9L4WmyGVxefY3S32PCFfahGvt2COJj1Ce6mWB3eouTnetk68HwMFqC7rsb57ZfuBAxfMQ43bHU73VaXF6VnHVkDh4K/j9z0TLIGAuNrUG6aIehXuaqnhfmnlhEC/+Hy/w51UAK/yfpijWDmcJL3Vxf63HXE7eNRUObdoIb2Y1Aq44WWkxRnda44StYGeJB6BuaD7Ipd7C7umeGXuJNJRy4+UKfBkrEXCJmisqMO78ibI=
