@@ -13,7 +13,7 @@
   "require": {
     "composer-plugin-api": "^1.0",
     "symfony/yaml": "^2.0",
-    "foundry/masonry": "^1.0.0-alpha@dev"
+    "foundry/masonry": "^1.0.0@alpha"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.8.21",
