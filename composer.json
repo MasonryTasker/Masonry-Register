@@ -13,7 +13,7 @@
   "require": {
     "composer-plugin-api": "^1.0",
     "symfony/yaml": "^2.0",
-    "foundry/masonry": "^1.0.0@alpha"
+    "foundry/masonry": "^1.0.0"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.8.21",
@@ -56,6 +56,8 @@
     "test": [
       "vendor/bin/phpunit"
     ],
-    "validate-masonry": "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::validate"
+    "validate-masonry": [
+      "Foundry\\Masonry\\ModuleRegister\\Composer\\Plugin::validate"
+    ]
   }
 }
