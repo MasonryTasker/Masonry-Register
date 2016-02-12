@@ -21,8 +21,10 @@ users of Masonry to provide their own Registry package.
 However, to install it independently via composer, use the following command from the command line:
 
 ```bash
-composer require foundry/masonry-register:^1.0.0@alpha -n
+composer require foundry/masonry-register -n
 ```
+
+Note: This will still install Masonry as it is a required component
 
 ## Overriding
 
